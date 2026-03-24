@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="register-container">
+    <div class="register-card">
+        <div class="icon">🛡️</div>
+        <h2>Create Your Account</h2>
+        <p class="subtitle">Register to book your vaccination appointment</p>
+
+        <form method="POST">
+            <div class="form-grid">
+                <div>
+                    <label>Full Name *</label>
+                    <input type="text" name="name" placeholder="John Doe" required>
+                </div>
+
+                <div>
+                    <label>Date of Birth *</label>
+                    <input type="date" name="dob" required>
+                </div>
+
+                <div>
+                    <label>Gender *</label>
+                    <select name="gender" required>
+                        <option value="">Select gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Phone Number *</label>
+                    <input type="text" name="phone" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+
+                <div>
+                    <label>Email Address *</label>
+                    <input type="email" name="email" placeholder="john@example.com">
+                </div>
+
+                
+
+                <div class="full">
+                    <label>Address *</label>
+                    <input type="text" name="address" placeholder="City, State" required>
+                </div>
+
+                <div>
+                    <label>Password *</label>
+                    <input type="password" name="password" placeholder="Min 6 characters" required>
+                </div>
+
+                <div>
+                    <label>Confirm Password *</label>
+                    <input type="password" name="confirm_password" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Register</button>
+        </form>
+
+        <p class="login-text">
+            Already have an account? <a href="#">Login here</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

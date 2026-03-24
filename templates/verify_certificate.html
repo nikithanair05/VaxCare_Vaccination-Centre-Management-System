@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Certificate Verification</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+<h2>Certificate Verification</h2>
+
+<div class="status-card">
+
+<p><strong>Name:</strong> {{ data.name }}</p>
+<p><strong>Vaccine:</strong> {{ data.vaccine }}</p>
+<p><strong>Batch Number:</strong> {{ data.batch_no }}</p>
+<p><strong>Centre:</strong> {{ data.centre_name }}</p>
+<p><strong>Date:</strong> {{ data.finished_at }}</p>
+
+<span class="status-badge completed">Valid Vaccination Certificate</span>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const bar = document.querySelector(".progress-fill");
+    if (bar) {
+        bar.style.width = bar.dataset.progress + "%";
+    }
+});
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<div id="scheduleModal" class="modal">
+
+<div class="modal-content schedule-box">
+
+<h3>Child Vaccination Schedule</h3>
+
+<table class="schedule-table">
+
+<tr>
+<th>Age</th>
+<th>Vaccines</th>
+</tr>
+
+<tr><td>Birth</td><td>BCG, Hep B1, OPV</td></tr>
+<tr><td>6 Weeks</td><td>DTwP/DTaP1, Hib-1, IPV-1, Hep B2, PCV 1, Rota-1</td></tr>
+<tr><td>10 Weeks</td><td>DTwP/DTaP2, Hib-2, IPV-2, Hep B3, PCV 2, Rota-2</td></tr>
+<tr><td>14 Weeks</td><td>DTwP/DTaP3, Hib-3, IPV-3, Hep B4, PCV 3, Rota-3</td></tr>
+<tr><td>6 Months</td><td>Influenza-1</td></tr>
+<tr><td>7 Months</td><td>Influenza-2</td></tr>
+<tr><td>6–9 Months</td><td>Typhoid Conjugate Vaccine</td></tr>
+<tr><td>9 Months</td><td>MMR 1 (Mumps, Measles, Rubella)</td></tr>
+<tr><td>12 Months</td><td>Hepatitis A-1</td></tr>
+<tr><td>12–15 Months</td><td>PCV Booster</td></tr>
+<tr><td>15 Months</td><td>MMR 2, Varicella</td></tr>
+<tr><td>16–18 Months</td><td>DTwP/DTaP, Hib, IPV</td></tr>
+<tr><td>18–19 Months</td><td>Hepatitis A-2, Varicella 2</td></tr>
+<tr><td>4–6 Years</td><td>DTwP/DTaP, IPV, MMR 3</td></tr>
+<tr><td>9–15 Years (Girls)</td><td>HPV (2 doses)</td></tr>
+<tr><td>10–12 Years</td><td>Tdap/Td</td></tr>
+<tr><td>2nd–5th Year</td><td>Annual Influenza Vaccine</td></tr>
+
+</table>
+
+<button onclick="closeSchedule()" class="btn-search">
+Close
+</button>
+
+</div>
+</div>
+<script>
+
+function openSchedule(){
+    document.getElementById("scheduleModal").style.display = "block";
+}
+
+function closeSchedule(){
+    document.getElementById("scheduleModal").style.display = "none";
+}
+
+</script>
+<body>
+
+<!-- NAVBAR -->
+<header class="dashboard-nav">
+    <div class="logo">🛡 VaxCare</div>
+    <nav>
+        <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+        <a href="/user/centres">Centres</a>
+        <a href="/user/bookings">My Appointments</a>
+        <a href="/user/status">Status</a>
+    </nav>
+    <div class="user-info">
+        <span>{{ name }}</span>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="dashboard-container">
+
+    <h2>Welcome, {{ name }}</h2>
+    <p class="sub-text">
+        Manage your vaccination appointments and track your vaccination status
+    </p>
+    {% if notification %}
+    <div class="notification-box">
+       {{ notification }}
+    </div>
+    {% endif %}
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Upcoming Appointments</h3>
+            <p class="stat-number">{{ upcoming }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Completed Vaccinations</h3>
+            <p class="stat-number">{{ completed }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Vaccination Status</h3>
+            <p class="status-text">{{ vaccination_status }}</p>
+        </div>
+    </div>
+
+    <!-- 🔥 UPCOMING VACCINATION PROGRESS (REAL-WORLD DATE) -->
+    {% if progress %}
+    <div class="progress-card">
+        <h3>Upcoming Vaccination</h3>
+
+        <p class="progress-text">
+            📅 <strong>Date:</strong> {{ progress.date }} <br>
+            ⏳ <strong>{{ progress.days_left }} days remaining</strong>
+        </p>
+
+        <div class="progress-bar">
+              <div class="progress-fill" data-progress="{{ progress.percent }}"></div>
+        </div>
+
+    </div>
+    {% endif %}
+
+    <!-- QUICK ACTIONS -->
+    <div class="actions-grid">
+        <div class="action-card">
+            <h4>Quick Actions</h4>
+            <a href="/user/centres">📍 Browse Vaccination Centres</a>
+            <a href="/user/bookings">📅 View My Appointments</a>
+            <a href="/user/status">📄 Vaccination Status & Certificate</a>
+        </div>
+
+        <div class="action-card">
+            <h4>Recent Activity</h4>
+
+            {% if recent %}
+                {% for r in recent %}
+                    <p>
+                        {{ r["booked_at"] }} —
+                        {{ r["status"].capitalize() }}
+                    </p>
+                {% endfor %}
+            {% else %}
+                <p>No appointments yet. Book your first appointment to get started.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-box">
+        <h3>Get Started with Your Vaccination</h3>
+        <p>Book your first vaccination appointment to protect yourself and your community</p>
+        <a href="/user/centres" class="primary-btn">Book Appointment</a>
+    </div>
+
+</div>
+<button onclick="openSchedule()" class="primary-btn">
+📋 Child Vaccination Schedule
+</button>
+</body>
+</html>

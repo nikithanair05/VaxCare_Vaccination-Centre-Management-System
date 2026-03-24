@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Centre | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="dashboard-navbar">
+    <h2>Edit Vaccination Centre</h2>
+    <a href="/admin/centres" class="logout-btn">Back</a>
+</header>
+
+<section class="dashboard-container">
+
+<form method="POST" class="form-card">
+    <input type="text" name="name" value="{{ centre.name }}" required>
+    <input type="text" name="address" value="{{ centre.address }}" required>
+    <input type="text" name="contact" value="{{ centre.contact }}" required>
+
+    <button type="submit">Update Centre</button>
+</form>
+
+</section>
+
+</body>
+</html>

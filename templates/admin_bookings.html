@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Bookings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<h2>All User Bookings</h2>
+<a href="{{ url_for('export_bookings') }}" class="btn-export">
+    Export to CSV
+</a>
+
+<form method="get" style="margin-bottom:20px;">
+    <input type="text" name="search" 
+           placeholder="Search by name or email"
+           value="{{ search_query if search_query else '' }}"
+           style="padding:8px; width:250px;">
+
+    <button type="submit" class="btn-search">
+        Search
+    </button>
+</form>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Centre</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for booking in bookings %}
+    <tr>
+        <td>{{ booking.booking_id }}</td>
+        <td>{{ booking.name }}</td>
+        <td>{{ booking.email }}</td>
+        <td>{{ booking.centre_name }}</td>
+        <td>{{ booking.date }}</td>
+        <td>{{ booking.start_time }} - {{ booking.end_time }}</td>
+
+        <td>
+            {% if booking.status == 'upcoming' %}
+                <span class="status upcoming">Upcoming</span>
+            {% elif booking.status == 'completed' %}
+                <span class="status completed">Completed</span>
+            {% elif booking.status == 'cancelled' %}
+                <span class="status cancelled">Cancelled</span>
+            {% elif booking.status == 'missed' %}
+                <span class="status missed">Missed</span>
+            {% else %}
+                {{ booking.status }}
+            {% endif %}
+        </td>
+
+        <td>
+            {% if booking.status == 'upcoming' %}
+                <a href="{{ url_for('complete_booking', booking_id=booking.booking_id) }}" 
+                   class="btn-complete">Mark Completed</a>
+            {% endif %}
+            {% if booking.status == 'upcoming' %}
+                <a href="{{ url_for('admin_cancel_booking', booking_id=booking.booking_id) }}"
+                   class="btn-cancel">Cancel</a>
+            {% endif %}
+
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+
+
+</body>
+</html>

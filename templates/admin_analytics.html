@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Analytics | VaxCare</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="dashboard-body">
+
+<header class="dashboard-navbar">
+<h2>Vaccination Analytics</h2>
+<a href="/admin-dashboard" class="logout-btn">Back</a>
+</header>
+
+
+<div class="dashboard-container">
+
+<h3 class="dashboard-title">Vaccination Analytics Report</h3>
+
+<!-- FILTER SECTION -->
+<form method="GET" class="search-bar">
+
+<label>Select Month:</label>
+
+<input type="month" name="month" value="{{ selected_month }}">
+
+<button type="submit" class="btn-search">Filter</button>
+
+<a href="/admin/export-analytics?month={{ selected_month }}" class="btn-export">
+Download Report
+</a>
+
+</form>
+
+
+<br><br>
+
+<h3 class="dashboard-title">Vaccinations per Centre</h3>
+
+<table class="centre-table">
+
+<tr>
+<th>Centre</th>
+<th>Total Vaccinations</th>
+</tr>
+
+{% for c in centre_stats %}
+<tr>
+<td>{{ c[0] }}</td>
+<td>{{ c[1] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+
+<br><br>
+
+<h3 class="dashboard-title">Vaccine Usage</h3>
+
+<table class="centre-table">
+
+<tr>
+<th>Vaccine</th>
+<th>Total Used</th>
+</tr>
+
+{% for v in vaccine_stats %}
+<tr>
+<td>{{ v[0] }}</td>
+<td>{{ v[1] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+
+<br><br>
+
+<h3 class="dashboard-title">Recent Booking Activity</h3>
+
+<table class="centre-table">
+
+<tr>
+<th>Date</th>
+<th>Total Bookings</th>
+</tr>
+
+{% for d in daily_stats %}
+<tr>
+<td>{{ d[0] }}</td>
+<td>{{ d[1] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

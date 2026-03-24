@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Appointments | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="dashboard-nav">
+    <div class="logo">🛡 VaxCare</div>
+    <nav>
+        <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('user_centres') }}">Centres</a>
+        <a class="active" href="{{ url_for('user_bookings') }}">My Appointments</a>
+        <a href="{{ url_for('user_status') }}">Status</a>
+    </nav>
+</header>
+
+<div class="dashboard-container">
+
+    <h2 class="page-title">My Appointments</h2>
+    <p class="page-subtitle">
+        View your upcoming and completed vaccination appointments
+    </p>
+
+    <div class="appointments-grid">
+
+        {% for booking in bookings %}
+        <div class="appointment-card">
+
+            <!-- CARD HEADER -->
+            <div class="card-header">
+                <h4>Vaccination Appointment</h4>
+                <span class="status-badge {{ booking.status|lower }}">
+                    {{ booking.status|capitalize }}
+                </span>
+            </div>
+
+            <!-- CARD BODY -->
+            <div class="card-body">
+                <p>📅 <strong>Date:</strong> {{ booking.date }}</p>
+                <p>⏰ <strong>Time:</strong> {{ booking.start_time }} - {{ booking.end_time }}</p>
+                <p>💉 <strong>Vaccine:</strong> {{ booking.vaccine }}</p>
+            </div>
+
+            <!-- CARD FOOTER -->
+            <div class="card-footer">
+
+                {% if booking.status == 'upcoming' %}
+
+                <a
+                    href="{{ url_for('cancel_booking', booking_id=booking.booking_id) }}"
+                    class="cancel-btn"
+                    onclick="return confirm('Are you sure you want to cancel this appointment?');"
+                >
+                    Cancel Appointment
+                </a>
+
+                {% elif booking.status == 'completed' %}
+
+                <a
+                    href="{{ url_for('download_certificate', booking_id=booking.booking_id) }}"
+                    class="btn-complete"
+                >
+                    Download Certificate
+                </a>
+
+                {% elif booking.status == 'missed' %}
+
+                <span class="status-badge missed">Missed Appointment</span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% else %}
+            <p class="muted">No appointments found.</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

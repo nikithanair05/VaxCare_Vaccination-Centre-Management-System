@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manage Staff | VaxCare</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="dashboard-nav">
+    <div class="logo">🛡 VaxCare</div>
+    <nav>
+        <a href="/admin-dashboard">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
+
+<div class="dashboard-container">
+
+<h2 class="page-title">Manage Staff</h2>
+<p class="page-subtitle">Add and manage vaccination staff</p>
+
+
+<!-- ADD STAFF CARD -->
+<div class="form-card">
+
+<h3>Add New Staff</h3>
+
+<form method="POST" class="staff-form">
+
+<input type="text" name="name" placeholder="Staff Name" required>
+
+<input type="email" name="email" placeholder="Email Address" required>
+
+<input type="password" name="password" placeholder="Password" required>
+
+<button type="submit" class="primary-btn">Add Staff</button>
+
+</form>
+
+</div>
+
+
+<!-- STAFF LIST -->
+<div class="table-card">
+
+<h3>Existing Staff</h3>
+
+<table class="centre-table">
+
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Action</th>
+</tr>
+
+{% for s in staff %}
+
+<tr>
+<td>{{ s.name }}</td>
+<td>{{ s.email }}</td>
+<td>
+<a href="/admin/staff/delete/{{ s.staff_id }}" 
+class="action-btn delete"
+onclick="return confirm('Delete this staff member?')">
+Delete
+</a>
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>

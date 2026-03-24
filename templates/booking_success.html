@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Confirmed | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="dashboard-nav">
+    <div class="logo">🛡 VaxCare</div>
+    <nav>
+        <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('user_bookings') }}">My Appointments</a>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </nav>
+</header>
+
+<div class="dashboard-container">
+
+    <div class="success-card">
+        <h2>✅ Booking Confirmed!</h2>
+        <p>Your vaccination appointment has been successfully booked.</p>
+
+        <div class="success-details">
+            <p><strong>Centre:</strong> {{ booking.centre_name }}</p>
+            <p><strong>Date:</strong> {{ booking.date }}</p>
+            <p><strong>Time:</strong> {{ booking.start_time }} - {{ booking.end_time }}</p>
+            <p><strong>Vaccine:</strong> {{ booking.vaccine }}</p>
+        </div>
+
+        <a href="{{ url_for('user_bookings') }}" class="primary-btn">
+            View My Appointments
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

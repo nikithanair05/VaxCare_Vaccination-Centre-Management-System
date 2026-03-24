@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vaccination Status | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="dashboard-nav">
+    <div class="logo">🛡 VaxCare</div>
+    <nav>
+        <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('user_centres') }}">Centres</a>
+        <a href="{{ url_for('user_bookings') }}">My Appointments</a>
+        <a class="active" href="{{ url_for('user_status') }}">Status</a>
+    </nav>
+</header>
+
+<div class="dashboard-container">
+
+    <h2 class="page-title">Vaccination Status</h2>
+
+    <!-- STATUS CARD -->
+    <div class="status-card">
+        <h3>Current Status</h3>
+        <span class="status-badge {{ status|lower|replace(' ', '-') }}">
+            {{ status }}
+        </span>
+
+        <p class="status-info">
+            Completed Doses: <strong>{{ completed }}</strong>
+        </p>
+    </div>
+
+    <!-- UPCOMING DOSES -->
+    <div class="status-section">
+        <h3>Upcoming Appointments</h3>
+
+        {% if upcoming %}
+            {% for u in upcoming %}
+                <div class="appointment-card">
+                    <p><strong>Date:</strong> {{ u["date"] }}</p>
+                    <p><strong>Time:</strong> {{ u["start_time"] }} - {{ u["end_time"] }}</p>
+                    <p><strong>Vaccine:</strong> {{ u["vaccine"] }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">No upcoming appointments.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

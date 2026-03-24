@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vaccination Centres | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="dashboard-nav">
+    <div class="logo">🛡 VaxCare</div>
+
+    <nav>
+        <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+        <a class="active" href="{{ url_for('user_centres') }}">Centres</a>
+        <a href="/user/bookings">My Appointments</a>
+        <a href="/user/status">Status</a>
+    </nav>
+
+    <div class="user-info">
+        <span>{{ session.get('user_name', '') }}</span>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </div>
+</header>
+
+<!-- PAGE CONTENT -->
+<div class="dashboard-container">
+
+    <h1 class="page-title">Available Vaccination Centres</h1>
+
+    <div class="centres-grid">
+        {% for centre in centres %}
+        <div class="centre-card">
+
+            <h3 class="centre-name">{{ centre["name"] }}</h3>
+
+            <p class="centre-address">
+                📍 {{ centre["address"] }}
+            </p>
+
+            <div class="centre-info">
+                <span>📞 {{ centre["contact"] }}</span>
+            </div>
+
+            <a href="{{ url_for('user_centre_slots', centre_id=centre['centre_id']) }}"
+              class="primary-btn">
+              View Available Slots
+            </a>
+
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+</html>

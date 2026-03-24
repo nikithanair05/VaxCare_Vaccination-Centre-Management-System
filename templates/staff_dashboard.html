@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Staff Dashboard | VaxCare</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    width: 350px;
+    margin: 10% auto;
+    border-radius: 10px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+}
+
+.modal-buttons {
+    display:flex;
+    gap:10px;
+}
+
+</style>
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="dashboard-nav">
+<div class="logo">🛡 VaxCare</div>
+
+<nav>
+<a class="active" href="/staff/dashboard">Dashboard</a>
+<a href="{{ url_for('logout') }}">Logout</a>
+</nav>
+</header>
+
+<!-- MAIN CONTAINER -->
+<div class="dashboard-container">
+
+<h2>Staff Dashboard</h2>
+<p class="sub-text">Today's Vaccination Appointments</p>
+
+<!-- SUMMARY CARDS -->
+<div class="dashboard-cards">
+
+<a href="/staff/dashboard" class="card total">
+    <h3>Total Today</h3>
+    <p>{{ total_today }}</p>
+</a>
+
+<a href="/staff/dashboard?status=completed" class="card completed">
+    <h3>Completed</h3>
+    <p>{{ completed_today }}</p>
+</a>
+
+<a href="/staff/dashboard?status=upcoming" class="card pending">
+    <h3>Pending</h3>
+    <p>{{ pending_today }}</p>
+</a>
+
+<a href="/staff/dashboard?status=missed" class="card missed">
+    <h3>Missed</h3>
+    <p>{{ missed_today }}</p>
+</a>
+
+</div>
+
+<!-- SEARCH -->
+<form method="get" class="search-bar">
+
+<input
+type="text"
+name="search"
+placeholder="Search by name, phone, or booking ID"
+value="{{ search_query or '' }}"
+>
+
+<button type="submit" class="btn-search">
+Search
+</button>
+
+</form>
+
+<!-- FILTERS -->
+<div class="status-filters">
+
+<a href="/staff/dashboard" class="filter-btn">All</a>
+
+<a href="/staff/dashboard?status=upcoming" class="filter-btn">
+Upcoming
+</a>
+
+<a href="/staff/dashboard?status=in_progress" class="filter-btn">
+In Progress
+</a>
+
+<a href="/staff/dashboard?status=completed" class="filter-btn">
+Completed
+</a>
+
+<a href="/staff/dashboard?status=missed" class="filter-btn">
+Missed
+</a>
+
+</div>
+
+<!-- APPOINTMENTS -->
+{% if appointments %}
+<div class="appointments-grid">
+
+{% for a in appointments %}
+
+<div class="appointment-card">
+
+<h4>{{ a["user_name"] }}</h4>
+
+<p>📅 {{ a["date"] }}</p>
+
+<p>⏰ {{ a["start_time"] }} - {{ a["end_time"] }}</p>
+
+<p>💉 {{ a["vaccine"] }}</p>
+
+<!-- ACTIONS -->
+
+{% if a["status"] == "upcoming" %}
+
+<a
+href="{{ url_for('start_vaccination', booking_id=a['booking_id']) }}"
+class="btn-start"
+onclick="return confirm('Confirm patient check-in and start vaccination?')"
+>
+Start
+</a>
+
+{% elif a["status"] == "in_progress" %}
+
+<button
+class="btn-finish"
+onclick="openFinishModal('{{ a.booking_id }}')"
+>
+Finish
+</button>
+
+{% elif a["status"] == "completed" %}
+
+<span class="status-badge completed">
+Completed
+</span>
+
+{% elif a["status"] == "missed" %}
+
+<span class="status-badge missed">
+Missed
+</span>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<p class="muted">No appointments scheduled for today.</p>
+
+{% endif %}
+
+</div>
+
+<!-- FINISH VACCINATION MODAL -->
+
+<div id="finishModal" class="modal">
+
+<div class="modal-content">
+
+<h3>Complete Vaccination</h3>
+
+<form id="finishForm" method="POST">
+
+<label>Vaccine Type</label>
+
+<input
+type="text"
+name="vaccine_type"
+placeholder="Enter vaccine type"
+required
+>
+
+<label>Batch Number</label>
+
+<input
+type="text"
+name="batch_no"
+placeholder="Enter batch number"
+required
+>
+
+<div class="modal-buttons">
+
+<button type="submit" class="btn-finish">
+Confirm
+</button>
+
+<button type="button" onclick="closeFinishModal()">
+Cancel
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+function openFinishModal(booking_id)
+{
+
+const modal = document.getElementById("finishModal");
+
+modal.style.display = "block";
+
+const form = document.getElementById("finishForm");
+
+form.action = "/staff/finish/" + booking_id;
+
+}
+
+function closeFinishModal()
+{
+document.getElementById("finishModal").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>

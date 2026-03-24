@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Slot | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="dashboard-navbar">
+    <h2>Edit Slot</h2>
+    <a href="/admin/slots" class="logout-btn">Back</a>
+</header>
+
+<section class="dashboard-container">
+
+<form method="POST" class="form-card">
+
+    <label>Centre</label>
+    <select name="centre_id" required>
+        {% for centre in centres %}
+        <option value="{{ centre.centre_id }}"
+            {% if centre.centre_id == slot.centre_id %}selected{% endif %}>
+            {{ centre.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label>Date</label>
+    <input type="date" name="date" value="{{ slot.date }}" required>
+
+    <label>Start Time</label>
+    <input type="time" name="start_time" value="{{ slot.start_time }}" required>
+
+    <label>End Time</label>
+    <input type="time" name="end_time" value="{{ slot.end_time }}" required>
+
+    <label>Capacity</label>
+    <input type="number" name="capacity" value="{{ slot.capacity }}" required>
+
+    <label>Vaccine</label>
+    <input type="text" name="vaccine" value="{{ slot.vaccine }}" required>
+
+    <button type="submit">Update Slot</button>
+</form>
+
+</section>
+
+</body>
+</html>

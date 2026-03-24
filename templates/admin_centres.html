@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Centres | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="dashboard-navbar">
+    <h2>Manage Vaccination Centres</h2>
+    <a href="/admin-dashboard" class="logout-btn">Back</a>
+</header>
+
+<section class="dashboard-container">
+
+    <h3>Add New Centre</h3>
+
+    <form method="POST" class="form-card">
+        <input type="text" name="name" placeholder="Centre Name" required>
+        <input type="text" name="address" placeholder="Address" required>
+        <input type="text" name="contact" placeholder="Contact Number" required>
+        <button type="submit">Add Centre</button>
+    </form>
+
+    <h3 style="margin-top:40px;">Existing Centres</h3>
+
+    <table class="centre-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for centre in centres %}
+            <tr>
+                <td>{{ centre.name }}</td>
+                <td>{{ centre.address }}</td>
+                <td>{{ centre.contact }}</td>
+                <td>
+                    <a href="/admin/centres/edit/{{ centre.centre_id }}" class="action-btn edit">Edit</a>
+                    <a href="/admin/centres/delete/{{ centre.centre_id }}"
+                       class="action-btn delete"
+                       onclick="return confirm('Are you sure you want to delete this centre?');">
+                       Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</section>
+
+</body>
+</html>

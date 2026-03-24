@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Slots | VaxCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+
+<header class="dashboard-nav">
+    <div class="logo">🛡 VaxCare</div>
+    <nav>
+        <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('user_centres') }}">Centres</a>
+        <a href="/user/bookings">My Appointments</a>
+        <a href="/user/status">Status</a>
+    </nav>
+</header>
+
+<div class="dashboard-container slots-layout">
+
+    <!-- LEFT SECTION -->
+    <div class="slots-main">
+
+        <!-- Centre Info -->
+        <div class="centre-card wide">
+            <h3>{{ centre["name"] }}</h3>
+            <p>📍 {{ centre["address"] }}</p>
+        </div>
+
+        <!-- DATE & SLOT SELECTION -->
+        <div class="slot-section">
+            <h4>Select Date & Time</h4>
+            <p class="muted">Choose an available slot for your vaccination</p>
+
+            <!-- DATE DROPDOWN -->
+            <form method="get" class="date-form">
+                <label class="date-label">Select Date</label>
+                <select name="date" class="date-select" onchange="this.form.submit()">
+                    {% for d in dates %}
+                        <option value="{{ d.isoformat() }}"
+                            {% if d.isoformat() == selected_date %}selected{% endif %}>
+                            {{ d.strftime("%a, %b %d, %Y") }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            <!-- TIME SLOTS -->
+            <div class="time-slots">
+                {% for slot in slots %}
+                    <div class="time-slot 
+                        {% if slot.slot_id == recommended_slot_id %}recommended{% endif %}"
+                        
+                        {% if slot.capacity > 0 %}
+                        onclick="selectSlot(this,
+                            '{{ slot.slot_id }}',
+                            '{{ slot.date }}',
+                            '{{ slot.start_time }} - {{ slot.end_time }}',
+                            '{{ slot.vaccine }}'
+                        )"
+                        {% endif %}
+                    >
+
+                        <!-- ⭐ Recommended Badge -->
+                        {% if slot.slot_id == recommended_slot_id %}
+                            <div class="recommended-badge">⭐ Recommended</div>
+                        {% endif %}
+
+                        <strong>🕒 {{ slot.start_time }}</strong>
+
+                        <span class="vaccine-name">
+                            💉 {{ slot.vaccine }}
+                        </span>
+
+                        {% if slot.capacity > 0 %}
+                            <span class="capacity">
+                                {{ slot.capacity }} left
+                            </span>
+
+                            <!-- ⭐ Waiting Time Feature -->
+                            <span class="wait-time">
+                                ⏳ Estimated Wait: {{ slot.wait_time }} mins
+                            </span>
+
+                        {% else %}
+                            <span class="full">Fully Booked</span>
+                        {% endif %}
+
+                    </div>
+                {% else %}
+                    <p class="muted">No slots available for this date.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT SECTION -->
+    <div class="booking-summary">
+        <h4>Booking Summary</h4>
+
+        <p><strong>Centre</strong><br>{{ centre["name"] }}</p>
+        <p><strong>Date</strong><br><span id="summary-date">—</span></p>
+        <p><strong>Time</strong><br><span id="summary-time">—</span></p>
+        <p><strong>Vaccine</strong><br><span id="summary-vaccine">—</span></p>
+
+        <a id="confirm-btn" class="confirm-btn disabled">Confirm Booking</a>
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+function selectSlot(element, id, date, time, vaccine) {
+
+    document.getElementById("summary-date").innerText = date;
+    document.getElementById("summary-time").innerText = time;
+    document.getElementById("summary-vaccine").innerText = vaccine;
+
+    const btn = document.getElementById("confirm-btn");
+    btn.classList.remove("disabled");
+    btn.href = "/user/book/" + id;
+
+    document.querySelectorAll(".time-slot").forEach(el =>
+        el.classList.remove("active")
+    );
+
+    element.classList.add("active");
+}
+</script>
+
+</body>
+</html>
